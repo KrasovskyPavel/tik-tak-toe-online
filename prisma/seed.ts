@@ -1,14 +1,34 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 async function main() {
+  const user = await prisma.user.create({
+    data: {
+      login: "user",
+      passwordHash: "3231231231admin",
+      rating: 1000,
+    },
+  });
+
   await prisma.game.create({
     data: {
-      name: "game-1",
+      field: Array(9).fill(null),
+      status: "idle",
+      players: {
+        connect: {
+          id: user.id,
+        },
+      },
     },
   });
   await prisma.game.create({
     data: {
-      name: "game-2",
+      field: Array(9).fill(null),
+      status: "idle",
+      players: {
+        connect: {
+          id: user.id,
+        },
+      },
     },
   });
 }
